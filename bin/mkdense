@@ -1,0 +1,134 @@
+#!/bin/bash
+
+CONVERT_PATH=`which convert`
+if [[ ! -x "$CONVERT_PATH" ]]; then
+  echo "You don't seem to have imagemagick installed" >&2
+  exit 1
+fi
+
+POSITIONAL=()
+
+XXHDPI=1
+XHDPI=1
+HDPI=1
+MDPI=1
+LDPI=0
+MIPMAP=0
+
+print_help() {
+  echo "usage: mkdense [-h|--help] [--mipmap] [--skip-xxhdpi] [--skip-xhdpi]"
+  echo "               [--skip-hdpi] [--skip-mdpi] [--ldpi] path"
+  echo
+  echo "This script facilitates creation of several densities of images. The path argument"
+  echo "should be the xxxhdpi image from which other densities will be created."
+  echo
+  echo "This tool relies on the convert(1) tool included with Imagemagick, so make sure"
+  echo "you have that installed first"
+  echo
+  echo "Options"
+  echo "       -h, --help     Display this help screen"
+  echo "       --mipmap       Specify that this is a mipmap image, rather than a drawable"
+  echo "                      The script will assume this as a default if the specified path"
+  echo "                      is in a mipmap- directory"
+  echo "       --skip-xxhdpi  Skip creation of an xxhdpi image"
+  echo "       --skip-xhdpi   Skip creation of an xhdpi image"
+  echo "       --skip-hdpi    Skip creation of an hdpi image"
+  echo "       --skip-mdpi    Skip creation of an mdpi image"
+  echo "       --ldpi         Create an ldpi image (not created by default)"
+  exit 1
+}
+
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+  case ${key} in
+    --help|-h)
+      print_help
+      ;;
+    --mipmap)
+      MIPMAP=1
+      shift
+      ;;
+    --skip-xxhdpi)
+      XXHDPI=0
+      shift
+      ;;
+    --skip-xhdpi)
+      XHDPI=0
+      shift
+      ;;
+    --skip-hdpi)
+      HDPI=0
+      shift
+      ;;
+    --skip-mdpi)
+      MDPI=0
+      shift
+      ;;
+    --ldpi)
+      LDPI=1
+      shift
+      ;;
+    *)
+      if [[ ${key} =~ ^- ]]; then
+        echo "Unrecognized argument: $key" >&2
+        echo
+        print_help
+        exit 1
+      fi
+      POSITIONAL+=("$1")
+      shift
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL[@]}"
+
+FILE_PATH=$1
+
+if [[ -z "$FILE_PATH" ]]; then
+  echo "You need to provide a file path" >&2
+  exit 1
+fi
+
+if [[ ! -f "$FILE_PATH" ]]; then
+  echo "File doesn't exist: $FILE_PATH" >&2
+  exit 1
+fi
+
+BASE_DIR="$(dirname ${FILE_PATH})/.."
+FILE_NAME="$(basename ${FILE_PATH})"
+
+if [[ "$1" =~ "mipmap-" ]]; then
+  MIPMAP=1
+fi
+
+resize_file() {
+  drawable_dir="${BASE_DIR}/drawable-$2"
+  if [[ "$MIPMAP" == "1" ]]; then
+    drawable_dir="${BASE_DIR}/mipmap-$2"
+  fi
+  mkdir -p ${drawable_dir}
+  ${CONVERT_PATH} ${FILE_PATH} -resize $1 ${drawable_dir}/${FILE_NAME}
+}
+
+
+if [[ "$XXHDPI" == "1" ]]; then
+  resize_file "75%", xxpi
+fi
+
+if [[ "$XHDPI" == "1" ]]; then
+  resize_file "50%", xhdpi
+fi
+
+if [[ "$HDPI" == "1" ]]; then
+  resize_file "37.5%", hdpi
+fi
+
+if [[ "$MDPI" == "1" ]]; then
+  resize_file "25%", mdpi
+fi
+
+if [[ "$LDPI" == "1" ]]; then
+  resize_file "18.75%", ldpi
+fi
