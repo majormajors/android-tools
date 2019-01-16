@@ -113,7 +113,7 @@ record_screenshot() {
     fi
   fi
 
-  FILENAME="${CURRENT_ACTIVITY_FQN}_$(date '+%Y-%m-%d-%H%M%S')"
+  FILENAME="${CURRENT_ACTIVITY_FQN}_$(date '+%Y-%m-%d-%H%M%S').png"
 
   ${SCREENSHOT_COMMAND} > ${OUTPUT_DIR}/${FILENAME}
   if [[ $? -eq 0 && "${QUIET}" == "0" ]]; then
