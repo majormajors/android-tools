@@ -114,7 +114,7 @@ resize_file() {
 
 
 if [[ "$XXHDPI" == "1" ]]; then
-  resize_file "75%", xxpi
+  resize_file "75%", xxhdpi
 fi
 
 if [[ "$XHDPI" == "1" ]]; then
