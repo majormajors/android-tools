@@ -7,7 +7,7 @@ OUTPUT_DIR=`pwd`
 APP_ID=""
 
 print_help() {
-  echo "usage: screenshot [-h|--help] [-s|--single] [-q|--quiet] [-o|--output dir] [-a|--app-id app.id]"
+  echo "usage: screenshot [-h|--help] [-q|--quiet] [-s|--single] [-o|--output dir] [-a|--app-id app.id]"
   echo
   echo "This script relies on adb being in your path or for the ANDROID_HOME variable to be set."
   echo
