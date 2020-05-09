@@ -7,17 +7,18 @@ OUTPUT_DIR=`pwd`
 APP_ID=""
 
 print_help() {
-  echo "usage: screenshot [-h|--help] [-s|--single] [-o|--output dir] [-a|--app-id app.id]"
+  echo "usage: screenshot [-h|--help] [-s|--single] [-q|--quiet] [-o|--output dir] [-a|--app-id app.id]"
   echo
   echo "This script relies on adb being in your path or for the ANDROID_HOME variable to be set."
   echo
   echo "If you specify an app ID, the script will only capture screenshots from that app"
   echo
   echo "Options"
-  echo "       -h, --help     Display this help screen"
-  echo "       --s, --single  Capture a single screenshot and then exit"
-  echo "       --a, --app-id  Capture screenshots from only the specified app id"
-  echo "       --o, --output  Specify the output directory (pwd by default)"
+  echo "       -h, --help    Display this help screen"
+  echo "       -q, --quiet   Quiet mode (no output)"
+  echo "       -s, --single  Capture a single screenshot and then exit"
+  echo "       -a, --app-id  Capture screenshots from only the specified app id"
+  echo "       -o, --output  Specify the output directory (pwd by default)"
 }
 
 check_value() {
