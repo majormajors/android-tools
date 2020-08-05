@@ -91,7 +91,7 @@ if [[ ! -x "${ADB_PATH}" ]]; then
   exit 1
 fi
 
-ACTIVITY_COMMAND="${ADB_PATH} shell dumpsys window windows | sed -nr 's/^.+mCurrentFocus=Window\{[0-9a-f]+ .. ([^}]+)\}$/\1/p'"
+ACTIVITY_COMMAND="${ADB_PATH} shell dumpsys window | sed -nr 's/^.+mCurrentFocus=Window\{[0-9a-f]+ .. ([^}]+)\}$/\1/p'"
 SCREENSHOT_COMMAND="${ADB_PATH} shell screencap -p"
 
 record_screenshot() {
