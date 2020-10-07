@@ -35,7 +35,7 @@ print_help() {
   echo "       --skip-hdpi    Skip creation of an hdpi image"
   echo "       --skip-mdpi    Skip creation of an mdpi image"
   echo "       --ldpi         Create an ldpi image (not created by default)"
-  exit 1
+  exit 0
 }
 
 while [[ $# -gt 0 ]]
